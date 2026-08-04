@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="ST" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="CorroboradorCAE v1.0.10" ExtVersion="1.0.10" Contdata="" Partner="Star Technology" DBType="HANA" ClientType="A">
+  <Validity>
+    <SBOCompatibility>
+      <Version From="" To="" />
+    </SBOCompatibility>
+  </Validity>
+  <Configuration>
+    <Repository>
+      <Properties />
+    </Repository>
+    <Deployment>
+      <Properties />
+    </Deployment>
+    <Assignment>
+      <Properties />
+    </Assignment>
+  </Configuration>
+  <Addons>
+    <Addon Name="" Group="" ForceFlag="" Visible="" AutoAssign="" SelfUpgrd="">
+      <x86 AddonExe="C:\STAR\Pruebas\AddonCorroboradorCAE\CorroboradorCAE\bin\Debug\SBOAddonProject1.exe" AddonSig="">
+        <Installation>
+          <Files>
+            <File FileName="Newtonsoft.Json.dll">
+              <Actions />
+            </File>
+            <File FileName="Newtonsoft.Json.xml">
+              <Actions />
+            </File>
+            <File FileName="SAPBusinessOneSDK.dll">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.b1s">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.exe">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.exe.config">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.pdb">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\diffupar.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\GCTESTCONSCAE.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\PASS STAR.txt">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\STARHOMO.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\ticket_Constatador.xml">
+              <Actions />
+            </File>
+          </Files>
+        </Installation>
+        <Uninstallation>
+          <Files>
+            <File FileName="Newtonsoft.Json.dll">
+              <Actions />
+            </File>
+            <File FileName="Newtonsoft.Json.xml">
+              <Actions />
+            </File>
+            <File FileName="SAPBusinessOneSDK.dll">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.b1s">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.exe">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.exe.config">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.pdb">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\diffupar.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\GCTESTCONSCAE.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\PASS STAR.txt">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\STARHOMO.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\ticket_Constatador.xml">
+              <Actions />
+            </File>
+          </Files>
+        </Uninstallation>
+      </x86>
+      <x64 AddonExe="C:\STAR\Pruebas\AddonCorroboradorCAE\CorroboradorCAE\bin\Debug\SBOAddonProject1.exe" AddonSig="">
+        <Installation>
+          <Files>
+            <File FileName="Newtonsoft.Json.dll">
+              <Actions />
+            </File>
+            <File FileName="Newtonsoft.Json.xml">
+              <Actions />
+            </File>
+            <File FileName="SAPBusinessOneSDK.dll">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.b1s">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.exe">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.exe.config">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.pdb">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\diffupar.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\GCTESTCONSCAE.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\PASS STAR.txt">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\STARHOMO.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\ticket_Constatador.xml">
+              <Actions />
+            </File>
+          </Files>
+        </Installation>
+        <Uninstallation>
+          <Files>
+            <File FileName="Newtonsoft.Json.dll">
+              <Actions />
+            </File>
+            <File FileName="Newtonsoft.Json.xml">
+              <Actions />
+            </File>
+            <File FileName="SAPBusinessOneSDK.dll">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.b1s">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.exe">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.exe.config">
+              <Actions />
+            </File>
+            <File FileName="SBOAddonProject1.pdb">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\diffupar.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\GCTESTCONSCAE.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\PASS STAR.txt">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\STARHOMO.p12">
+              <Actions />
+            </File>
+            <File FileName="ResourcesAFIP\ticket_Constatador.xml">
+              <Actions />
+            </File>
+          </Files>
+        </Uninstallation>
+      </x64>
+    </Addon>
+  </Addons>
+  <XApps>
+    <XApp Name="" Path="" FileName="" />
+  </XApps>
+  <UDQs>
+    <UDQ udqname="">
+      <Hana FileName="" />
+    </UDQ>
+  </UDQs>
+</AddOnRegData>

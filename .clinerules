@@ -1,0 +1,16 @@
+# Reglas del Proyecto (AddonCorroboradorCAE)
+
+## 1. Arquitectura General
+- **Frontend**: SAP Business One Add-on (.NET Framework 4.8). Su función principal es la recolección de datos de la factura activa y la presentación del resultado de validación.
+- **Backend**: ASP.NET Core Web API (.NET 5.0). Centraliza toda la lógica de validación ante AFIP, mapeo de comprobantes, manejo de certificados y firma electrónica.
+- **Comunicación**: El Frontend se comunica con el Backend mediante peticiones HTTP POST (JSON) utilizando la clase nativa `HttpClient`.
+- **Seguridad**: Los certificados digitales `.p12` se gestionan exclusivamente en el Backend.
+
+## 2. Pautas de Desarrollo y Modificación
+- **Simplicidad**: Utilizar implementaciones nativas siempre que sea posible.
+- **Logging Controlado**: Para evitar la saturación de archivos, se deben registrar (loguear) de manera persistente únicamente las excepciones y las validaciones fallidas o rechazadas por AFIP. Las peticiones exitosas no requieren un registro exhaustivo en disco.
+- **Gestión de Interfaz SAP**: Minimizar la complejidad en el Add-on de SAP. El Backend debe actuar de manera inteligente tomando decisiones para aligerar la carga del Frontend.
+
+## 3. Memory Banks
+- Todas las actualizaciones de contexto, decisiones arquitectónicas o hitos de desarrollo deben registrarse en la carpeta `memory-bank` ubicada en la raíz del proyecto.
+- Revisar y mantener actualizados los archivos `activeContext.md` y `progress.md` de dicha carpeta antes de finalizar tareas clave.

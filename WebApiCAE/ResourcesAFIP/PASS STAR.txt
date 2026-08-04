@@ -1,0 +1,3 @@
+pass: 12345
+CUIT STAR 30702653270
+Está autorizado para Factura Local, Expo, y también para constatación de CAE
