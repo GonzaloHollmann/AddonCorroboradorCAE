@@ -1,18 +1,33 @@
-# Contexto Activo - Migración WebApiCAE
+# Contexto Activo - Migración WebApiCAE y Soporte Multicomprobante
 
 ## Estado Actual
-El sistema Backend (`WebApiCAE`) y Frontend (`CorroboradorCAE`) han sido reforzados con una robusta capa de validación de reglas de negocio en dos niveles. Se ha priorizado la integridad de los datos antes de consumir los servicios de AFIP. Actualmente, el sistema permite realizar pruebas técnicas end-to-end mediante una solución de anulación manual de CAE.
+El sistema Backend (`WebApiCAE`) y Frontend (`CorroboradorCAE`) han sido adaptados para dar soporte integral a los 4 tipos de formularios de compras de SAP Business One: Facturas de Proveedores (`141`), Notas de Crédito de Proveedores (`181`), Notas de Débito de Proveedores (`65306`) y Facturas de Reserva de Proveedores (`60092`). La arquitectura fue reforzada con manejo global de excepciones en el Backend (retornando siempre HTTP 200 con `CAEResponse` para evitar errores 500 no descriptivos en SAP), sanitización estricta en el mapeo AFIP y compatibilidad dual de serialización (`Newtonsoft.Json` + `System.Text.Json`).
 
 ## Decisiones Técnicas Clave
-- **Validación en Dos Capas**: 
-  - **Frontend**: Chequeo exhaustivo en SAP antes de la llamada a la API (longitud de CUITs, formato de fecha, integridad de CAE e importes).
-  - **Backend**: Re-validación de integridad del objeto `CAERequest` para protección de la API y retorno de errores `400 Bad Request`.
-- **Backend Inteligente**: Centraliza todas las decisiones. Si el entorno es `HOMO`, responde inmediatamente con éxito simulado. Realiza el mapeo de letras de SAP ('A', 'B', etc.) a códigos de AFIP.
-- **Lógica de CUIT Representante**: El backend utiliza el `CuitRepresentante` configurado en `appsettings.json` para todas las gestiones ante AFIP, actuando en nombre del dueño del certificado.
-- **Llamado API Directo**: Se utiliza `HttpClient` directamente en el método `ValidarCaeAFIPAsync` con serialización `Newtonsoft.Json` nativa para asegurar un comportamiento predecible y evitar configuraciones complejas de proxy o SSL del entorno SAP.
-- **DTOs Unificados**: Campos del DTO `CAERequest` alineados con la arquitectura del Portal de Proveedores.
-- **Compatibilidad VS 2019**: Utiliza **.NET 5.0** con estructura estándar.
-- **Estrategia de Prueba Técnica**: Se habilitó una solución temporal en el Frontend que permite ingresar manualmente el CAE en el campo `Comments` de la factura. Esto permite validar el circuito completo (AddOn -> Backend -> AFIP) sin depender de la lógica final de obtención del CAE en SAP.
+- **Manejo Global de Excepciones y Diagnóstico Amigable**:
+  - En `CAEController.cs`, todo el flujo del endpoint `constatar` está cubierto por un bloque global `try-catch`.
+  - Ante cualquier excepción o error de validación interna, **no** se devuelve un código HTTP 500 ni 400. Se retorna `Ok()` (HTTP 200) con el objeto `CAEResponse` indicando `ResultadoConstatacion = "E"` y el detalle exacto de la excepción (`ex.Message`, `InnerException` y `StackTrace`).
+  - Esto garantiza que el Frontend no interrumpa su flujo por `HttpRequestException` y pueda mostrar un `MessageBox` con la información precisa del error para diagnóstico inmediato.
+- **Robustez y Sanitización en el Mapeo AFIP (`MapearTipoAFIP`)**:
+  - Se aplica `.Trim().ToUpper()` sobre la letra del comprobante y el tipo de documento.
+  - La matriz AFIP cubre:
+    - **FACTURA**: A = 1, B = 6, C = 11, M = 51
+    - **ND (Nota de Débito)**: A = 2, B = 7, C = 12, M = 52
+    - **NC (Nota de Crédito)**: A = 3, B = 8, C = 13, M = 53
+  - Si se recibe una combinación no válida o vacía, lanza una excepción explícita que es capturada y reportada inmediatamente en el mensaje de error.
+- **Compatibilidad Dual de Serialización en DTOs**:
+  - `CAEDTOs.cs` cuenta con atributos tanto de `Newtonsoft.Json` (`[JsonProperty]`) como de `System.Text.Json` (`[JsonPropertyName]`) para asegurar la vinculación correcta de propiedades en cualquier contexto de deserialización.
+- **Soporte de los 4 Formularios SAP B1**:
+  - **Formulario 141**: Facturas de Proveedores estándar (tabla `OPCH`).
+  - **Formulario 181**: Notas de Crédito de Proveedores (tabla `ORPC`).
+  - **Formulario 65306**: Notas de Débito de Proveedores (tabla `OPCH`).
+  - **Formulario 60092**: Facturas de Reserva de Proveedores (tabla `OPCH`).
+- **Refactorización Limpia con `CaeValidationHelper`**:
+  - Inyección dual de botón (`SystemFormBase` + `SBO_Application_ItemEvent`).
+  - Control de idempotencia y antirrebote (`_isValidating`).
+  - Detección automática y escalable de documento y tabla (`DeterminarDocumento`).
+- **Exclusión de Artefactos de Publicación**:
+  - Se agregó la regla `PUB/` al `.gitignore` y se desvincularon del índice de Git los zips existentes (`PUB/1.0.1.zip` a `1.0.10.zip`) para evitar subir paquetes binarios a GitHub, preservando los archivos locales.
 
 ## Reglas de Negocio Implementadas
 1. **CAE**: Obligatorio, mínimo 14 dígitos.
@@ -20,7 +35,7 @@ El sistema Backend (`WebApiCAE`) y Frontend (`CorroboradorCAE`) han sido reforza
 3. **Punto de Venta**: Obligatorio, numérico, autocompletado a 5 dígitos.
 4. **Fecha**: Obligatoria, formato YYYYMMDD.
 5. **Importe**: Obligatorio, mayor a cero.
-6. **Tipo Comprobante**: Letras válidas (A, B, C, M).
+6. **Tipo Comprobante**: Letras válidas (A, B, C, M) cruzadas con el TipoDocumento ('FACTURA', 'ND', 'NC').
 
 ## Próximos Pasos
-- Realizar prueba end-to-end contra homologación real desactivando el modo simulación en el Backend.
+- Probar la validación de Factura normal (141) y verificar en SAP el mensaje descriptivo si ocurriese algún fallo de conexión con AFIP o certificados.

@@ -30,6 +30,7 @@ namespace SBOAddonProject1
                 MyMenu.AddMenuItems();
                 oApp.RegisterMenuEventHandler(MyMenu.SBO_Application_MenuEvent);
                 Application.SBO_Application.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(SBO_Application_AppEvent);
+                Application.SBO_Application.ItemEvent += new SAPbouiCOM._IApplicationEvents_ItemEventEventHandler(CaeValidationHelper.SBO_Application_ItemEvent);
                 oApp.Run();
             }
             catch (Exception ex)

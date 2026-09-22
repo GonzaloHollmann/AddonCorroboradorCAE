@@ -116,6 +116,9 @@ namespace SBOAddonProject1
         [JsonProperty("docTipoRecep")]
         public string docTipoRecep { get; set; }
 
+        [JsonProperty("tipoDocumento")]
+        public string tipoDocumento { get; set; }
+
         [JsonProperty("impTotal")]
         public double impTotal { get; set; }
     }

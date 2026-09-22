@@ -105,5 +105,8 @@ _ReSharper*/
 # SAP B1 specific (if any, like temp ard files)
 # ...
 
+# Published Addon Packages
+PUB/
+
 # Memory banks or other files if needed
 # We keep memory-bank tracked!

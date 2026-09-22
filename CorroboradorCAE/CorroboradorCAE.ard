@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="ST" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="CorroboradorCAE v1.0.10" ExtVersion="1.0.10" Contdata="" Partner="Star Technology" DBType="HANA" ClientType="A">
+<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="ST" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="CorroboradorCAE v1.0.11" ExtVersion="1.0.11" Contdata="" Partner="Star Technology" DBType="HANA" ClientType="A">
   <Validity>
     <SBOCompatibility>
       <Version From="" To="" />

@@ -37,11 +37,16 @@ namespace WebApiCAE.Controllers
                 {
                     try
                     {
+                        string dir = System.IO.Path.GetDirectoryName(logPath);
+                        if (!string.IsNullOrEmpty(dir) && !System.IO.Directory.Exists(dir))
+                            System.IO.Directory.CreateDirectory(dir);
+
                         string jsonRequest = System.Text.Json.JsonSerializer.Serialize(request);
                         System.IO.File.AppendAllText(logPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - BAD REQUEST: {jsonRequest} | ERROR: {validationErrors}{Environment.NewLine}");
                     }
                     catch { }
-                    return BadRequest(new CAEResponse { 
+
+                    return Ok(new CAEResponse { 
                         ResultadoConstatacion = "E", 
                         Msg = "Error de validación en el Backend: " + validationErrors 
                     });
@@ -61,7 +66,7 @@ namespace WebApiCAE.Controllers
                 }
 
                 // 1. Mapeo de Tipo de Comprobante a código AFIP (numérico)
-                int cbteTipoCodigo = MapearTipoAFIP(request.cbteTipo);
+                int cbteTipoCodigo = MapearTipoAFIP(request.cbteTipo, request.TipoDocumento);
 
                 // 2. Obtener Token y Sign (PROD) usando CuitRepresentante
                 var (token, sign) = await _afipAuth.ObtenerTokenConstatador();
@@ -107,28 +112,70 @@ namespace WebApiCAE.Controllers
             {
                 try
                 {
-                    System.IO.File.AppendAllText(@"C:\inetpub\wwwroot\CorroboradorCAE\log_api.txt", $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - ERROR: {ex.ToString()}{Environment.NewLine}");
+                    string dir = System.IO.Path.GetDirectoryName(logPath);
+                    if (!string.IsNullOrEmpty(dir) && !System.IO.Directory.Exists(dir))
+                        System.IO.Directory.CreateDirectory(dir);
+
+                    System.IO.File.AppendAllText(logPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - ERROR: {ex}{Environment.NewLine}");
                 }
                 catch { }
 
-                _logger.LogError(ex, "Error al procesar la constatación de CAE.");
-                return StatusCode(500, new CAEResponse
+                string errorDetalle = ex.InnerException != null 
+                    ? $"{ex.Message} --> {ex.InnerException.Message}" 
+                    : ex.Message;
+
+                _logger.LogError(ex, "Error al procesar la constatación de CAE: " + errorDetalle);
+
+                return Ok(new CAEResponse
                 {
-                    Msg = $"Error interno: {ex.Message}"
+                    ResultadoConstatacion = "E",
+                    Msg = $"Error Interno API: {errorDetalle} | StackTrace: {ex.StackTrace}"
                 });
             }
         }
 
-        private int MapearTipoAFIP(string letra)
+        private int MapearTipoAFIP(string letra, string tipoDocumento)
         {
-            if (string.IsNullOrEmpty(letra)) return 1;
-            switch (letra.ToUpper())
+            string l = (letra ?? "").Trim().ToUpper();
+            string tipo = (tipoDocumento ?? "FACTURA").Trim().ToUpper();
+
+            switch (tipo)
             {
-                case "A": return 1;   // Portal '001'
-                case "B": return 6;   // Portal '006'
-                case "C": return 11;  // Portal '011'
-                case "M": return 51;  // Portal '051'
-                default: return 1;
+                case "FACTURA":
+                    switch (l)
+                    {
+                        case "A": return 1;
+                        case "B": return 6;
+                        case "C": return 11;
+                        case "M": return 51;
+                        default:
+                            throw new Exception($"Tipo de documento o letra no soportado: TipoDocumento='{tipoDocumento}', Letra='{letra}'");
+                    }
+
+                case "ND": // Nota de Débito
+                    switch (l)
+                    {
+                        case "A": return 2;
+                        case "B": return 7;
+                        case "C": return 12;
+                        case "M": return 52;
+                        default:
+                            throw new Exception($"Tipo de documento o letra no soportado: TipoDocumento='{tipoDocumento}', Letra='{letra}'");
+                    }
+
+                case "NC": // Nota de Crédito
+                    switch (l)
+                    {
+                        case "A": return 3;
+                        case "B": return 8;
+                        case "C": return 13;
+                        case "M": return 53;
+                        default:
+                            throw new Exception($"Tipo de documento o letra no soportado: TipoDocumento='{tipoDocumento}', Letra='{letra}'");
+                    }
+
+                default:
+                    throw new Exception($"Tipo de documento o letra no soportado: TipoDocumento='{tipoDocumento}', Letra='{letra}'");
             }
         }
 

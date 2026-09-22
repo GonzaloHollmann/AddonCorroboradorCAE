@@ -6,7 +6,7 @@ namespace SBOAddonProject1
     public static class Logger
     {
         private static readonly string LogDir = @"C:\ProgramData\CorroboradorCAE";
-        private static readonly string LogPath = Path.Combine(LogDir, "Log_Front.txt");
+        private static readonly string LogPath = Path.Combine(LogDir, $"Log_Front_{Environment.UserName}.txt");
 
         public static void Info(string message)
         {
@@ -35,9 +35,9 @@ namespace SBOAddonProject1
                 string logLine = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{level}] {message}{Environment.NewLine}";
                 File.AppendAllText(LogPath, logLine);
             }
-            catch (Exception ex)
+            catch
             {
-                System.Windows.Forms.MessageBox.Show($"Error al escribir log en {LogPath}:\n{ex.Message}", "Error de Logger", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                // Si falla el log, falla en silencio para no bloquear la ejecución del Add-on
             }
         }
 
